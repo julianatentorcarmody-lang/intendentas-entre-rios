@@ -4,7 +4,7 @@ Mapa interactivo de los 84 municipios de Entre Ríos según el género de la aut
 
 **Ver el mapa:** https://julianatentorcarmody-lang.github.io/intendentas-entre-rios/
 
-Al pasar el cursor (o tocar) un municipio se ven su población (Censo 2022), sus autoridades y partidos en ambos períodos, y si hubo continuidad o cambio. Incluye una vista del cambio entre períodos, un buscador y una tabla con los 84 municipios.
+Al pasar el cursor (o tocar) un municipio se ven su población (Censo 2022), sus autoridades y partidos en ambos períodos, y si hubo continuidad o cambio. Incluye un buscador y una tabla con los 84 municipios.
 
 En los 84 municipios, las intendentas pasaron de 9 (2019-2023) a 15 (2023-2027).
 
@@ -24,4 +24,4 @@ Todo el mapa está en un único archivo, `index.html`, con los datos incluidos. 
 - Población: INDEC, Censo Nacional de Población, Hogares y Viviendas 2022.
 - Mapa base: © [colaboradores de OpenStreetMap](https://www.openstreetmap.org/copyright) (ODbL). La página incluye las teselas de zoom 7 a 9; al acercarse más, las pide en vivo a `tile.openstreetmap.org`.
 
-Elaboración: Juliana Tentor Carmody (UNER).
+Elaboración: UNER-UADER. Contacto: julianatentor@gmail.com

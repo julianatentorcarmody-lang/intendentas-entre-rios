@@ -65,20 +65,13 @@ h2 { font-size: 1.45rem; }
 .cifra b .m { color: var(--mujer); }
 .cifra > span { color: var(--muted); font-size: .9rem; }
 .controles { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; justify-content: space-between; }
-.vista { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; padding: 3px; background: var(--surface); }
-.vista button {
-  font: inherit; font-weight: 500; border: 0; background: none; color: var(--muted); padding: 6px 14px;
-  border-radius: 999px; cursor: pointer;
-}
-.vista button[aria-pressed="true"] { background: var(--fg); color: var(--bg); }
-.vista button:focus-visible, .buscar input:focus-visible, .zoom button:focus-visible, tbody tr:focus-visible { outline: 2px solid var(--mujer); outline-offset: 2px; }
+.buscar input:focus-visible, .zoom button:focus-visible, tbody tr:focus-visible { outline: 2px solid var(--mujer); outline-offset: 2px; }
 .buscar { display: flex; gap: 8px; align-items: center; }
 .buscar input {
   font: inherit; padding: 7px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface);
   color: var(--fg); width: min(260px, 60vw);
 }
 .mapas { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.mapas.cambio { grid-template-columns: minmax(0, 720px); justify-content: center; }
 .mapa { position: relative; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; min-width: 0; overflow: hidden; }
 .mapa header { position: absolute; top: 12px; left: 14px; z-index: 2; pointer-events: none; }
 .mapa header h2 { font-size: 1.6rem; }
@@ -146,6 +139,7 @@ td .persona .chip { transform: translateY(1px); }
 .notas { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px 32px; font-size: .88rem; color: var(--muted); }
 .notas h3 { font: 600 .78rem var(--ui); text-transform: uppercase; letter-spacing: .08em; color: var(--fg); margin: 0 0 4px; }
 .notas p { margin: 0; max-width: 62ch; }
+.correo { user-select: all; color: var(--fg); }
 @media (max-width: 760px) {
   .mapas { grid-template-columns: 1fr; }
   .cifra b { font-size: 2.1rem; }
@@ -164,10 +158,6 @@ td .persona .chip { transform: translateY(1px); }
   </header>
 
   <section class="controles" aria-label="Controles del mapa">
-    <div class="vista" role="group" aria-label="Vista">
-      <button type="button" id="v-dos" aria-pressed="true">Dos períodos</button>
-      <button type="button" id="v-cambio" aria-pressed="false">Cambio 2019 → 2023</button>
-    </div>
     <label class="buscar" for="buscar"><span class="etiqueta">Buscar</span>
       <input id="buscar" type="search" list="lista-mun" placeholder="Municipio…" autocomplete="off">
     </label>
@@ -191,7 +181,7 @@ td .persona .chip { transform: translateY(1px); }
   <section class="notas" aria-label="Notas y fuentes">
     <div><h3>Qué se muestra</h3><p>Los 84 municipios vigentes en 2026, con el polígono de su jurisdicción (ejido). Comunas, juntas de gobierno y zonas sin gobierno local quedan en gris como contexto. Las jurisdicciones grandes y poco pobladas, como Victoria con sus islas, pesan visualmente más que su población: la tabla permite leer cada caso por igual.</p></div>
     <div><h3>Casos a tener en cuenta</h3><p>Sauce Montrull era comuna en 2019-2023 y es municipio desde el 1 de enero de 2026 (Ley 11.233). Para 2023-2027 se registra la autoridad vigente a octubre de 2026. "Continuidad" compara apellido y nombre entre ambos períodos.</p></div>
-    <div><h3>Fuentes</h3><p>Límites: ATER, Catastro de Entre Ríos (servicio WFS, 2026); departamentos, ríos y espejos de agua: IGN. Autoridades 2019-2023: DataGénero (relevamiento de 2023). Autoridades 2023-2027: base de la autora con correcciones registradas. Población: INDEC, Censo 2022. Mapa base: © colaboradores de OpenStreetMap (ODbL). Elaboración: Juliana Tentor Carmody (UNER).</p></div>
+    <div><h3>Fuentes</h3><p>Límites: ATER, Catastro de Entre Ríos (servicio WFS, 2026); departamentos, ríos y espejos de agua: IGN. Autoridades 2019-2023: DataGénero (relevamiento de 2023). Autoridades 2023-2027: base de la autora con correcciones registradas. Población: INDEC, Censo 2022. Mapa base: © colaboradores de OpenStreetMap (ODbL). Elaboración: UNER-UADER. Contacto: <span class="correo">julianatentor@gmail.com</span>.</p></div>
   </section>
 </div>
 
@@ -354,31 +344,14 @@ td .persona .chip { transform: translateY(1px); }
     mapas.forEach(m => m.capaMun.classed("activo", d => d.properties.id_gl === id));
   }
 
-  // --- Vistas: dos períodos o mapa del cambio ------------------------------------------------
+  // --- Los dos mapas: 2019-2023 y 2023-2027 -------------------------------------------------
   const leyenda = document.getElementById("leyenda");
   const contexto = `<span><span class="chip comuna"></span>Comuna</span><span><span class="chip junta"></span>Junta de gobierno</span>
     <span><span class="chip singl"></span>Sin gobierno local</span><span><span class="linea"></span>Ríos y arroyos</span><span><span class="linea d"></span>Departamentos</span>`;
-  function vista(tipo) {
-    contenedor.innerHTML = "";
-    mapas.length = 0;
-    contenedor.classList.toggle("cambio", tipo === "cambio");
-    document.getElementById("v-dos").setAttribute("aria-pressed", tipo === "dos");
-    document.getElementById("v-cambio").setAttribute("aria-pressed", tipo === "cambio");
-    if (tipo === "dos") {
-      crearMapa("m19", "2019-2023", `${m19} intendentas`, p => p.genero_2019);
-      crearMapa("m23", "2023-2027", `${m23} intendentas`, p => p.genero_2023);
-      leyenda.innerHTML = `<span class="fuerte"><span class="chip Femenino"></span>Intendenta (mujer)</span>
-        <span class="fuerte"><span class="chip Masculino"></span>Intendente (varón)</span>${contexto}`;
-    } else {
-      crearMapa("mc", "Cambio 2019 → 2023", "Género de la autoridad en ambos períodos", p => "c-" + codigoCambio(p));
-      leyenda.innerHTML = Object.entries(nombresCambio).map(([k, v]) =>
-        `<span class="fuerte"><span class="chip c-${k}"></span>${v} (${cambios[k]})</span>`).join("") + contexto;
-    }
-    mapas.forEach(m => m.svg.call(m.zoom.transform, transformacion));
-  }
-  document.getElementById("v-dos").onclick = () => vista("dos");
-  document.getElementById("v-cambio").onclick = () => vista("cambio");
-  vista("dos");
+  crearMapa("m19", "2019-2023", `${m19} intendentas`, p => p.genero_2019);
+  crearMapa("m23", "2023-2027", `${m23} intendentas`, p => p.genero_2023);
+  leyenda.innerHTML = `<span class="fuerte"><span class="chip Femenino"></span>Intendenta (mujer)</span>
+    <span class="fuerte"><span class="chip Masculino"></span>Intendente (varón)</span>${contexto}`;
 
   // --- Ir a un municipio (buscador y tabla) --------------------------------------------------
   function irA(id) {
