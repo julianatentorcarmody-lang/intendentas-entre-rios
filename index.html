@@ -20,9 +20,10 @@
   --varon-suave: #a9c6e8;
   --mujer: #7b3294;
   --mujer-suave: #d3b3e0;
-  --comuna: #cfd0d6;
-  --junta: #dcdde2;
-  --singl: #e9e9ee;
+  /* Fondo (opción 1 elegida): tres escalones de gris bien separados */
+  --comuna: #a6a8b1;
+  --junta: #d0d2d9;
+  --singl: #f6f6f8;
   --agua: #9cc3e0;
   --agua-area: #c3dbee;
   --depto: #3b3c44;
@@ -35,14 +36,14 @@
   :root:not([data-theme="light"]) {
     --bg: #15161b; --surface: #1e1f26; --fg: #ececf1; --muted: #a2a4b0; --line: #34363f;
     --varon: #5c9ae6; --varon-suave: #2c4766; --mujer: #b47ad6; --mujer-suave: #573a66;
-    --comuna: #3a3c45; --junta: #33353d; --singl: #2a2c33; --agua: #4f7ea3; --agua-area: #2a4459;
+    --comuna: #5d606b; --junta: #3f414b; --singl: #24252c; --agua: #4f7ea3; --agua-area: #2a4459;
     --depto: #c9cad3; --urbano: rgba(255, 255, 255, .14); --halo: #15161b; color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --bg: #15161b; --surface: #1e1f26; --fg: #ececf1; --muted: #a2a4b0; --line: #34363f;
   --varon: #5c9ae6; --varon-suave: #2c4766; --mujer: #b47ad6; --mujer-suave: #573a66;
-  --comuna: #3a3c45; --junta: #33353d; --singl: #2a2c33; --agua: #4f7ea3; --agua-area: #2a4459;
+  --comuna: #5d606b; --junta: #3f414b; --singl: #24252c; --agua: #4f7ea3; --agua-area: #2a4459;
   --depto: #c9cad3; --urbano: rgba(255, 255, 255, .14); --halo: #15161b; color-scheme: dark;
 }
 * { box-sizing: border-box; }
@@ -84,8 +85,8 @@ h2 { font-size: 1.45rem; }
   border-radius: 6px; font: 600 1rem var(--ui); cursor: pointer;
 }
 path { vector-effect: non-scaling-stroke; }
-.f-comuna { fill: var(--comuna); } .f-junta { fill: var(--junta); } .f-singl { fill: var(--singl); }
-.fondo path { stroke: var(--bg); stroke-width: .5; fill-opacity: .62; }
+.f-comuna { fill: var(--comuna); fill-opacity: .88; } .f-junta { fill: var(--junta); fill-opacity: .88; } .f-singl { fill: var(--singl); fill-opacity: .82; }
+.fondo path { stroke: var(--surface); stroke-width: .5; }
 .osm image { filter: grayscale(.55) contrast(.95); pointer-events: none; }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .osm image { filter: grayscale(.6) invert(.9) hue-rotate(180deg) brightness(.85); } }
 :root[data-theme="dark"] .osm image { filter: grayscale(.6) invert(.9) hue-rotate(180deg) brightness(.85); }
